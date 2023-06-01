@@ -4,12 +4,21 @@ using UnityEditor;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 [DefaultExecutionOrder(1000)]
 public class MenuUIHandler : MonoBehaviour
 {
     [SerializeField] private TMP_InputField inputField;
+    [SerializeField] private TMP_Text highscoreText;
+
+    private void Start()
+    {
+        var playername = GameManager.Instance.highscorePlayername;
+        var score = GameManager.Instance.highscore;
+        if (!playername.Equals(""))
+            highscoreText.text = $"Best Score: {playername} : {score}";
+    }
+
     public void StartNew() => SceneManager.LoadScene(1);
     
     public void Exit()

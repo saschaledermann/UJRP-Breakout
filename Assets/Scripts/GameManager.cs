@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public string playerName;
-    
+    public string highscorePlayername;
+    public int highscore;
+
     private void Awake()
     {
         // start of new code
@@ -18,5 +18,14 @@ public class GameManager : MonoBehaviour
         
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        highscorePlayername = PlayerPrefs.GetString("Playername");
+        highscore = PlayerPrefs.GetInt("Highscore");
+    }
+
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.SetString("Playername", highscorePlayername);
+        PlayerPrefs.SetInt("Highscore", highscore);
     }
 }

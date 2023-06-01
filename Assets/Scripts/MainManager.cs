@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,6 +10,7 @@ public class MainManager : MonoBehaviour
 
     public Text ScoreText;
     public GameObject GameOverText;
+    [SerializeField] private Text highscoreText;
     
     private bool m_Started = false;
     private int m_Points;
@@ -36,6 +35,8 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+        
+        UpdateHighscoreText();
     }
 
     private void Update()
@@ -55,10 +56,8 @@ public class MainManager : MonoBehaviour
         }
         else if (m_GameOver)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
+            if (Input.GetKeyDown(KeyCode.Space)) 
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
         }
     }
 
@@ -71,6 +70,24 @@ public class MainManager : MonoBehaviour
     public void GameOver()
     {
         m_GameOver = true;
+        UpdateHighscoreText();
         GameOverText.SetActive(true);
+        
+    }
+
+    private void UpdateHighscoreText()
+    {
+        var score = GameManager.Instance.highscore;
+        var name = GameManager.Instance.highscorePlayername;
+        if (score < m_Points || name.Equals(""))
+        {
+            highscoreText.text = $"Best Score: {GameManager.Instance.playerName} : {m_Points}";
+            GameManager.Instance.highscorePlayername = GameManager.Instance.playerName;
+            GameManager.Instance.highscore = m_Points;
+        }
+        else
+        {
+            highscoreText.text = $"Best Score: {name} : {score}";
+        }
     }
 }
